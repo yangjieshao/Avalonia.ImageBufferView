@@ -1,0 +1,30 @@
+<Project>
+
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+
+        <DebugSymbols>true</DebugSymbols>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/yangjieshao/Avalonia.ImageBufferView.git</RepositoryUrl>
+
+        <RootNamespace>Avalonia.ImageBufferView</RootNamespace>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1570;CS1591</NoWarn>
+
+        <Product>Avalonia.ImageBufferView</Product>
+        <Trademark>Avalonia.ImageBufferView</Trademark>
+        <Copyright>Copyright (c) </Copyright>
+        <Description>Avalonia 图片二进制流显示 (主要用于显示摄像头画面).</Description>
+
+        <Authors>Yangjieshao</Authors>
+        <PackageProjectUrl>https://github.com/yangjieshao/Avalonia.ImageBufferView</PackageProjectUrl>
+        <NoWarn>$(NoWarn);NU1605;NU1701;NU1803</NoWarn>
+    </PropertyGroup>
+
+</Project>
