@@ -18,7 +18,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// 代播放图片流缓存
         /// </summary>
 
-        private List<byte[]> buffers = new List<byte[]>();
+        private readonly List<byte[]> buffers = new ();
 
         private CancellationTokenSource? _cancellationTokenSource;
 
