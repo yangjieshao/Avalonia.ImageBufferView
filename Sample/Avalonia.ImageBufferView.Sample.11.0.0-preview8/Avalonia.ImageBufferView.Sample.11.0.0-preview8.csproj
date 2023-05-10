@@ -12,11 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview8" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview8" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview8" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview8" />
         <PackageReference Include="ReactiveUI.Fody" Version="18.4.34" />
     </ItemGroup>
 
@@ -24,15 +24,20 @@
         <Compile Include="..\Avalonia.ImageBufferView.Sample\Program.cs" Link="Program.cs" />
         <AvaloniaResource Include="..\Avalonia.ImageBufferView.Sample\Assets\**" Link="Assets\%(Filename)%(Extension)" />
         <Compile Include="..\Avalonia.ImageBufferView.Sample\ViewModels\*.cs" Link="ViewModels\%(Filename)%(Extension)" />
-        
+
         <AvaloniaXaml Include="..\Avalonia.ImageBufferView.Sample\Views\*.axaml" Link="Views\%(Filename)%(Extension)">
             <SubType>Designer</SubType>
         </AvaloniaXaml>
         <Compile Include="..\Avalonia.ImageBufferView.Sample\Views\*.cs" Link="Views\%(Filename)%(Extension)" />
+
+        <AvaloniaXaml Include="..\Avalonia.ImageBufferView.Sample.11.0.0-preview6\*.axaml" Link="%(Filename)%(Extension)">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+        <Compile Include="..\Avalonia.ImageBufferView.Sample.11.0.0-preview6\*.cs" Link="%(Filename)%(Extension)" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Avalonia.ImageBufferView.11.0.0-preview6\Avalonia.ImageBufferView.11.0.0-preview6.csproj" />
+        <ProjectReference Include="..\..\Avalonia.ImageBufferView.11.0.0-preview8\Avalonia.ImageBufferView.11.0.0-preview8.csproj" />
     </ItemGroup>
 
     <ItemGroup>

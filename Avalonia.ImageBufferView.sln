@@ -23,7 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.ImageBufferView.11
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.ImageBufferView.Sample", "Sample\Avalonia.ImageBufferView.Sample\Avalonia.ImageBufferView.Sample.csproj", "{85A1C45D-C30F-4187-B565-F64663EF35C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.Sample.11.0.0-preview6", "Sample\Avalonia.ImageBufferView.Sample.11.0.0-preview6\Avalonia.ImageBufferView.Sample.11.0.0-preview6.csproj", "{3398EB1F-E364-475F-A651-4FA848B3D494}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.ImageBufferView.Sample.11.0.0-preview6", "Sample\Avalonia.ImageBufferView.Sample.11.0.0-preview6\Avalonia.ImageBufferView.Sample.11.0.0-preview6.csproj", "{3398EB1F-E364-475F-A651-4FA848B3D494}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.Sample.11.0.0-preview7", "Sample\Avalonia.ImageBufferView.Sample.11.0.0-preview7\Avalonia.ImageBufferView.Sample.11.0.0-preview7.csproj", "{915D8259-71EC-4F33-9669-80D058A190AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.Sample.11.0.0-preview8", "Sample\Avalonia.ImageBufferView.Sample.11.0.0-preview8\Avalonia.ImageBufferView.Sample.11.0.0-preview8.csproj", "{369CD2E5-E17A-431B-B828-5544787D1428}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,14 @@ Global
 		{3398EB1F-E364-475F-A651-4FA848B3D494}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3398EB1F-E364-475F-A651-4FA848B3D494}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3398EB1F-E364-475F-A651-4FA848B3D494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{915D8259-71EC-4F33-9669-80D058A190AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{915D8259-71EC-4F33-9669-80D058A190AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{915D8259-71EC-4F33-9669-80D058A190AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{915D8259-71EC-4F33-9669-80D058A190AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{369CD2E5-E17A-431B-B828-5544787D1428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{369CD2E5-E17A-431B-B828-5544787D1428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{369CD2E5-E17A-431B-B828-5544787D1428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{369CD2E5-E17A-431B-B828-5544787D1428}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +74,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{85A1C45D-C30F-4187-B565-F64663EF35C4} = {47186386-D20C-4107-BA0B-DE8DC4E24CF0}
 		{3398EB1F-E364-475F-A651-4FA848B3D494} = {47186386-D20C-4107-BA0B-DE8DC4E24CF0}
+		{915D8259-71EC-4F33-9669-80D058A190AB} = {47186386-D20C-4107-BA0B-DE8DC4E24CF0}
+		{369CD2E5-E17A-431B-B828-5544787D1428} = {47186386-D20C-4107-BA0B-DE8DC4E24CF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6FDD66D8-4A78-487F-8696-DCDBF2F8EF78}
