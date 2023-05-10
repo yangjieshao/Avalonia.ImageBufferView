@@ -1,9 +1,8 @@
 ﻿using ReactiveUI.Fody.Helpers;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
 using System.IO;
-using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Avalonia.ImageBufferView.Sample.ViewModels
 {
@@ -14,11 +13,12 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// </summary>
         [Reactive]
         public byte[]? ImageBuffer { get; private set; }
+
         /// <summary>
-        /// 代播放图片流缓存
+        /// 待播放图片流缓存
         /// </summary>
 
-        private readonly List<byte[]> buffers = new ();
+        private readonly List<byte[]> buffers = new();
 
         private CancellationTokenSource? _cancellationTokenSource;
 
@@ -53,14 +53,9 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     {
                         break;
                     }
-                    try
-                    {
-                        var buffer = File.ReadAllBytes(file.FullName);
-                        buffers.Add(buffer);
-                    }
-                    catch
-                    {
-                    }
+
+                    var buffer = File.ReadAllBytes(file.FullName);
+                    buffers.Add(buffer);
                 }
 
                 if (buffers.Count == 0)
@@ -76,7 +71,6 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                             break;
                         }
                         ImageBuffer = buffer;
-
                         Task.Delay(1).Wait();
                     }
                 }
