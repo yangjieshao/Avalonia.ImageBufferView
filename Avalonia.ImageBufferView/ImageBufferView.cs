@@ -9,7 +9,7 @@ public partial class ImageBufferView : Control
 {
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
         AvaloniaProperty.Register<ImageBufferView, Stretch>(
-            nameof(Stretch), Stretch.None);
+            nameof(Stretch));
 
     public Stretch Stretch
     {
@@ -29,31 +29,31 @@ public partial class ImageBufferView : Control
 
     static ImageBufferView()
     {
-        AffectsRender<ImageBufferView>(ImageBufferProperty, StretchProperty, StretchDirectionProperty);
-        AffectsMeasure<ImageBufferView>(ImageBufferProperty, StretchProperty, StretchDirectionProperty);
-        AffectsArrange<ImageBufferView>(ImageBufferProperty, StretchProperty, StretchDirectionProperty);
+        AffectsRender<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+        AffectsMeasure<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+        AffectsArrange<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
     }
 
     public static readonly AvaloniaProperty<byte[]> ImageBufferProperty =
         AvaloniaProperty.Register<ImageBufferView, byte[]>(
             nameof(ImageBuffer), coerce: (sender, e) =>
             {
-                if (sender is ImageBufferView control)
+                if (sender is not ImageBufferView { _canUpdataBitmap: true } control)
+                {
+                    return e;
+                }
+
+                if (e is { Length: > 0 })
                 {
                     var oldBitmap = control.Bitmap;
-                    if (e is byte[] buffer
-                    && buffer.Length > 0)
-                    {
-                        using MemoryStream stream = new (buffer);
-                        control.Bitmap = new Bitmap(stream);
-                        control.SourceSize = control.Bitmap.Size;
-                    }
-                    else
-                    {
-                        control.Bitmap = null;
-                        control.SourceSize = control.RenderSize;
-                    }
+                    using MemoryStream stream = new(e);
+                    control.Bitmap = new Bitmap(stream);
                     oldBitmap?.Dispose();
+                    control._canUpdataBitmap = false;
+                }
+                else
+                {
+                    control.Bitmap = null;
                 }
                 return e;
             });
@@ -67,10 +67,32 @@ public partial class ImageBufferView : Control
         set => this.SetValue(ImageBufferProperty, value);
     }
 
+    public static readonly AvaloniaProperty<Bitmap?> BitmapProperty =
+        AvaloniaProperty.Register<ImageBufferView, Bitmap?>(
+            nameof(Bitmap), coerce: (sender, e) =>
+            {
+                if (sender is not ImageBufferView control)
+                {
+                    return e;
+                }
+                
+                control.SourceSize = e?.Size ?? control.RenderSize;
+                return e;
+            });
+
     /// <summary>
     /// 实际渲染的画面
     /// </summary>
-    public Bitmap? Bitmap { get; private set; }
+    public Bitmap? Bitmap
+    {
+        get => (Bitmap?)this.GetValue(BitmapProperty)!;
+        set => this.SetValue(BitmapProperty, value);
+    }
+
+    /// <summary>
+    /// 需要更新渲染画面
+    /// </summary>
+    private bool _canUpdataBitmap = true;
 
     public Size RenderSize => this.Bounds.Size;
 
@@ -78,33 +100,19 @@ public partial class ImageBufferView : Control
 
     protected override Size MeasureOverride(Size constraint)
     {
-        if (Bitmap is { })
-        {
-            return Stretch.CalculateSize(constraint, SourceSize, StretchDirection);
-        }
-        else
-        {
-            return default;
-        }
+        return Bitmap is not null ? Stretch.CalculateSize(constraint, SourceSize, StretchDirection) : default;
     }
 
     protected override Size ArrangeOverride(Size arrangeSize)
     {
-        if (Bitmap is { })
-        {
-            return Stretch.CalculateSize(arrangeSize, SourceSize);
-        }
-        else
-        {
-            return default;
-        }
+        return Bitmap is not null ? Stretch.CalculateSize(arrangeSize, SourceSize) : default;
     }
 
     public override void Render(DrawingContext drawingContext)
     {
-        if (Bitmap is { })
+        if (Bitmap is not null)
         {
-            Size sourceSize = SourceSize;
+            var sourceSize = SourceSize;
 
             var viewPort = new Rect(RenderSize);
             var scale = Stretch.CalculateScaling(RenderSize, sourceSize, StretchDirection);
@@ -115,14 +123,13 @@ public partial class ImageBufferView : Control
             var sourceRect = new Rect(sourceSize)
                 .CenterRect(new Rect(destRect.Size / scale));
 
-            if (Bitmap is { })
+            if (Bitmap is not null)
             {
                 drawingContext.DrawImage(Bitmap, sourceRect, destRect);
             }
+            _canUpdataBitmap = true;
         }
-        else
-        {
-            base.Render(drawingContext);
-        }
+
+        base.Render(drawingContext);
     }
 }

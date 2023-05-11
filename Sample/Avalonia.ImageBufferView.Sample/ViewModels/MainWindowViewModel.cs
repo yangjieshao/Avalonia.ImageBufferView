@@ -1,6 +1,8 @@
-﻿using ReactiveUI.Fody.Helpers;
+﻿using System;
+using ReactiveUI.Fody.Helpers;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,13 +20,13 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// 待播放图片流缓存
         /// </summary>
 
-        private readonly List<byte[]> buffers = new();
+        private readonly List<byte[]> _buffers = new();
 
         private CancellationTokenSource? _cancellationTokenSource;
 
         public void Start()
         {
-            if (_cancellationTokenSource is { })
+            if (_cancellationTokenSource is not null)
             {
                 _cancellationTokenSource.Cancel();
                 _cancellationTokenSource = null;
@@ -55,23 +57,26 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     }
 
                     var buffer = File.ReadAllBytes(file.FullName);
-                    buffers.Add(buffer);
+                    _buffers.Add(buffer);
                 }
 
-                if (buffers.Count == 0)
+                if (_buffers.Count == 0)
                 {
                     return;
                 }
                 while (!token.IsCancellationRequested)
                 {
-                    foreach (var buffer in buffers)
+                    foreach (var buffer in _buffers.TakeWhile(buffer => !token.IsCancellationRequested))
                     {
-                        if (token.IsCancellationRequested)
-                        {
-                            break;
-                        }
                         ImageBuffer = buffer;
-                        Task.Delay(1).Wait();
+                        try
+                        {
+                            Task.Delay(1, token).Wait(token);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
                     }
                 }
             }, token);
