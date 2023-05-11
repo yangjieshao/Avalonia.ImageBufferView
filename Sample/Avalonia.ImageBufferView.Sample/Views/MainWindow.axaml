@@ -21,10 +21,7 @@
     </Window.DataContext>
 
 
-    <Grid
-        ColumnDefinitions="100,*,*,*"
-        RowDefinitions="70,*,*,*,*"
-        UseLayoutRounding="True">
+    <Grid ColumnDefinitions="100,*,*,*" RowDefinitions="50,*,*,*,*">
 
         <Button
             Grid.Row="0"
@@ -42,165 +39,128 @@
             Grid.Column="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Text="Both"
-            UseLayoutRounding="True" />
+            Text="Both" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="2"
-            Margin="10"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Text="UpOnly"
-            UseLayoutRounding="True" />
+            Text="UpOnly" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="3"
-            Margin="10"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Text="DownOnly"
-            UseLayoutRounding="True" />
+            Text="DownOnly" />
 
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
-            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Text="None"
-            UseLayoutRounding="True" />
+            Text="None" />
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
-            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Text="Fill"
-            UseLayoutRounding="True" />
+            Text="Fill" />
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
-            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Text="Uniform"
-            UseLayoutRounding="True" />
+            Text="Uniform" />
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
-            Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Text="UniformToFill"
-            UseLayoutRounding="True" />
+            Text="UniformToFill" />
 
         <ibv:ImageBufferView
             Name="FirstPic"
             Grid.Row="1"
             Grid.Column="1"
-            Margin="5"
             ImageBuffer="{Binding ImageBuffer}"
             Stretch="None"
-            StretchDirection="Both"
-            UseLayoutRounding="True" />
+            StretchDirection="Both" />
 
         <ibv:ImageBufferView
             Grid.Row="1"
             Grid.Column="2"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="None"
-            StretchDirection="UpOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="UpOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="1"
             Grid.Column="3"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="None"
-            StretchDirection="DownOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="DownOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="2"
             Grid.Column="1"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Fill"
-            StretchDirection="Both"
-            UseLayoutRounding="True" />
+            StretchDirection="Both" />
 
         <ibv:ImageBufferView
             Grid.Row="2"
             Grid.Column="2"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Fill"
-            StretchDirection="UpOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="UpOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="2"
             Grid.Column="3"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Fill"
-            StretchDirection="DownOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="DownOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="3"
             Grid.Column="1"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Uniform"
-            StretchDirection="Both"
-            UseLayoutRounding="True" />
+            StretchDirection="Both" />
 
         <ibv:ImageBufferView
             Grid.Row="3"
             Grid.Column="2"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Uniform"
-            StretchDirection="UpOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="UpOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="3"
             Grid.Column="3"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Uniform"
-            StretchDirection="DownOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="DownOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="4"
             Grid.Column="1"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="UniformToFill"
-            StretchDirection="Both"
-            UseLayoutRounding="True" />
+            StretchDirection="Both" />
 
         <ibv:ImageBufferView
             Grid.Row="4"
             Grid.Column="2"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="UniformToFill"
-            StretchDirection="UpOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="UpOnly" />
 
         <ibv:ImageBufferView
             Grid.Row="4"
             Grid.Column="3"
-            Margin="5"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="UniformToFill"
-            StretchDirection="DownOnly"
-            UseLayoutRounding="True" />
+            StretchDirection="DownOnly" />
     </Grid>
 </Window>
