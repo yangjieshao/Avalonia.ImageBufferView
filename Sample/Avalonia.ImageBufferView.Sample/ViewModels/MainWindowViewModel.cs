@@ -24,7 +24,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
 
         private CancellationTokenSource? _cancellationTokenSource;
 
-        public void Start()
+        public async void Start()
         {
             if (_cancellationTokenSource is not null)
             {
@@ -35,51 +35,54 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            LoadImage(_cancellationTokenSource.Token);
+            await LoadImage(_cancellationTokenSource.Token);
         }
 
-        private void LoadImage(CancellationToken token)
+        private async ValueTask LoadImage(CancellationToken token)
         {
-            Task.Run(() =>
+            if (!Directory.Exists("Images"))
             {
-                if (!Directory.Exists("Images"))
+                return;
+            }
+            var files = new DirectoryInfo("Images").GetFiles("*.jpeg");
+
+            // Ready buffers
+            foreach (var file in files)
+            {
+                if (token.IsCancellationRequested)
                 {
-                    return;
+                    break;
                 }
-                var files = new DirectoryInfo("Images").GetFiles("*.jpeg");
-
-                // Ready buffers
-                foreach (var file in files)
+                try
                 {
-                    if (token.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
-                    var buffer = File.ReadAllBytes(file.FullName);
+                    var buffer = await File.ReadAllBytesAsync(file.FullName, token);
                     _buffers.Add(buffer);
                 }
-
-                if (_buffers.Count == 0)
+                catch (Exception)
                 {
-                    return;
+                    // ignored
                 }
-                while (!token.IsCancellationRequested)
+            }
+
+            if (_buffers.Count == 0)
+            {
+                return;
+            }
+            while (!token.IsCancellationRequested)
+            {
+                foreach (var buffer in _buffers.TakeWhile(buffer => !token.IsCancellationRequested))
                 {
-                    foreach (var buffer in _buffers.TakeWhile(buffer => !token.IsCancellationRequested))
+                    ImageBuffer = buffer;
+                    try
                     {
-                        ImageBuffer = buffer;
-                        try
-                        {
-                            Task.Delay(1, token).Wait(token);
-                        }
-                        catch (Exception)
-                        {
-                            // ignored
-                        }
+                        await Task.Delay(1, token);
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
                     }
                 }
-            }, token);
+            }
         }
     }
 }
