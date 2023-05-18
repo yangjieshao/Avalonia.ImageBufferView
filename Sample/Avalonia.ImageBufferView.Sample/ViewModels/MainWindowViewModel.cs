@@ -14,13 +14,13 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// 当前播放的图片
         /// </summary>
         [Reactive]
-        public byte[]? ImageBuffer { get; private set; }
+        public ArraySegment<byte>? ImageBuffer { get; private set; }
 
         /// <summary>
         /// 待播放图片流缓存
         /// </summary>
 
-        private readonly List<byte[]> _buffers = new();
+        private readonly List<ArraySegment<byte>> _buffers = new();
 
         private CancellationTokenSource? _cancellationTokenSource;
 

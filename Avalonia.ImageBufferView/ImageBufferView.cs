@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using System;
 using System.IO;
 
 namespace Avalonia.ImageBufferView;
@@ -34,8 +35,8 @@ public partial class ImageBufferView : Control
         AffectsArrange<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
     }
 
-    public static readonly AvaloniaProperty<byte[]> ImageBufferProperty =
-        AvaloniaProperty.Register<ImageBufferView, byte[]>(
+    public static readonly AvaloniaProperty<ArraySegment<byte>?> ImageBufferProperty =
+        AvaloniaProperty.Register<ImageBufferView, ArraySegment<byte>?>(
             nameof(ImageBuffer), coerce: (sender, e) =>
             {
                 if (sender is not ImageBufferView { _canUpdataBitmap: true } control)
@@ -43,10 +44,12 @@ public partial class ImageBufferView : Control
                     return e;
                 }
 
-                if (e is { Length: > 0 })
+                if (e.HasValue
+                && e.Value.Array != null
+                && e.Value.Array.Length>0)
                 {
                     var oldBitmap = control.Bitmap;
-                    using MemoryStream stream = new(e);
+                    using MemoryStream stream = new(e.Value.Array);
                     control.Bitmap = new Bitmap(stream);
                     oldBitmap?.Dispose();
                     control._canUpdataBitmap = false;
@@ -61,9 +64,9 @@ public partial class ImageBufferView : Control
     /// <summary>
     /// 要渲染的图片的流
     /// </summary>
-    public byte[]? ImageBuffer
+    public ArraySegment<byte>? ImageBuffer
     {
-        get => (byte[]?)this.GetValue(ImageBufferProperty);
+        get => (ArraySegment<byte>?)this.GetValue(ImageBufferProperty);
         set => this.SetValue(ImageBufferProperty, value);
     }
 
