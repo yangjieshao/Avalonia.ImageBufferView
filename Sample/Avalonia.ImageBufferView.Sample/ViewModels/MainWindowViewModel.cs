@@ -1,10 +1,10 @@
 ﻿using System;
-using ReactiveUI.Fody.Helpers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace Avalonia.ImageBufferView.Sample.ViewModels
 {
@@ -13,8 +13,12 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// <summary>
         /// 当前播放的图片
         /// </summary>
-        [Reactive]
-        public ArraySegment<byte>? ImageBuffer { get; private set; }
+        public ArraySegment<byte>? ImageBuffer
+        {
+            get => _ImageBuffer;
+            set => this.RaiseAndSetIfChanged(ref _ImageBuffer, value);
+        }
+        private ArraySegment<byte>? _ImageBuffer;
 
         /// <summary>
         /// 待播放图片流缓存
