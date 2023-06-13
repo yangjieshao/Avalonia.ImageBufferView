@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.ReactiveUI;
+﻿using Avalonia.ReactiveUI;
 using System;
 
 namespace Avalonia.ImageBufferView.Sample
