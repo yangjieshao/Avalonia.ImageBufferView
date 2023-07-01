@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.11
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.Sample.11.0.0-rc1.1", "Sample\Avalonia.ImageBufferView.Sample.11.0.0-rc1.1\Avalonia.ImageBufferView.Sample.11.0.0-rc1.1.csproj", "{08A1F534-D100-4B27-8183-D5835624AE36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.ImageBufferView.11.0.0-rc2.1", "Avalonia.ImageBufferView.11.0.0-rc2.1\Avalonia.ImageBufferView.11.0.0-rc2.1.csproj", "{52AC3F2E-97FC-4715-ACF0-4CDC871B6A22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{08A1F534-D100-4B27-8183-D5835624AE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08A1F534-D100-4B27-8183-D5835624AE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08A1F534-D100-4B27-8183-D5835624AE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52AC3F2E-97FC-4715-ACF0-4CDC871B6A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52AC3F2E-97FC-4715-ACF0-4CDC871B6A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52AC3F2E-97FC-4715-ACF0-4CDC871B6A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52AC3F2E-97FC-4715-ACF0-4CDC871B6A22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
