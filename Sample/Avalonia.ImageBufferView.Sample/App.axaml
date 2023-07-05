@@ -2,8 +2,9 @@
     x:Class="Avalonia.ImageBufferView.Sample.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Avalonia.ImageBufferView.Sample">
+    xmlns:local="using:Avalonia.ImageBufferView.Sample"
+    RequestedThemeVariant="Light">
     <Application.Styles>
-        <FluentTheme Mode="Light" />
+        <FluentTheme />
     </Application.Styles>
 </Application>
