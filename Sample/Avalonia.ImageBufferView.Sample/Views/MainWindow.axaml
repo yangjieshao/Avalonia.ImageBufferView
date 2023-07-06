@@ -32,7 +32,8 @@
             Padding="10,5"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Content=" Start / Stop">
+            Content=" Start / Stop"
+            Cursor="Hand">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="Click">
                     <!--<ia:InvokeCommandAction Command="{Binding StartCommand}" />-->
