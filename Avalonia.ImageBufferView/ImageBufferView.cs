@@ -8,14 +8,24 @@ namespace Avalonia.ImageBufferView;
 
 public partial class ImageBufferView : Control
 {
+    static ImageBufferView()
+    {
+        AffectsRender<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+        AffectsMeasure<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+        AffectsArrange<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+
+        ImageBufferProperty.Changed.AddClassHandler<ImageBufferView>(ImageBufferChanged);
+        BitmapProperty.Changed.AddClassHandler<ImageBufferView>(BitmapChanged);
+    }
+
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
         AvaloniaProperty.Register<ImageBufferView, Stretch>(
             nameof(Stretch));
 
     public Stretch Stretch
     {
-        get => (Stretch)this.GetValue(StretchProperty)!;
-        set => this.SetValue(StretchProperty, value);
+        get => (Stretch)GetValue(StretchProperty)!;
+        set => SetValue(StretchProperty, value);
     }
 
     public static readonly AvaloniaProperty<StretchDirection> StretchDirectionProperty =
@@ -24,72 +34,70 @@ public partial class ImageBufferView : Control
 
     public StretchDirection StretchDirection
     {
-        get => (StretchDirection)this.GetValue(StretchDirectionProperty)!;
-        set => this.SetValue(StretchDirectionProperty, value);
-    }
-
-    static ImageBufferView()
-    {
-        AffectsRender<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
-        AffectsMeasure<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
-        AffectsArrange<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty);
+        get => (StretchDirection)GetValue(StretchDirectionProperty)!;
+        set => SetValue(StretchDirectionProperty, value);
     }
 
     public static readonly AvaloniaProperty<ArraySegment<byte>?> ImageBufferProperty =
         AvaloniaProperty.Register<ImageBufferView, ArraySegment<byte>?>(
-            nameof(ImageBuffer), coerce: (sender, e) =>
-            {
-                if (sender is not ImageBufferView { _canUpdataBitmap: true } control)
-                {
-                    return e;
-                }
-
-                if (e.HasValue
-                && e.Value.Array != null
-                && e.Value.Array.Length>0)
-                {
-                    var oldBitmap = control.Bitmap;
-                    using MemoryStream stream = new(e.Value.Array);
-                    control.Bitmap = new Bitmap(stream);
-                    oldBitmap?.Dispose();
-                    control._canUpdataBitmap = false;
-                }
-                else
-                {
-                    control.Bitmap = null;
-                }
-                return e;
-            });
+            nameof(ImageBuffer));
 
     /// <summary>
     /// 要渲染的图片的流
     /// </summary>
     public ArraySegment<byte>? ImageBuffer
     {
-        get => (ArraySegment<byte>?)this.GetValue(ImageBufferProperty);
-        set => this.SetValue(ImageBufferProperty, value);
+        get => (ArraySegment<byte>?)GetValue(ImageBufferProperty);
+        set => SetValue(ImageBufferProperty, value);
+    }
+
+    private static void ImageBufferChanged(ImageBufferView sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is ArraySegment<byte> buffer
+            && buffer.Array != null
+                && buffer.Array.Length > 0)
+        {
+            if (!sender._canUpdataBitmap)
+            {
+                return;
+            }
+            sender._canUpdataBitmap = false;
+            var oldBitmap = sender.Bitmap;
+            using var stream = new MemoryStream(buffer.Array);
+            sender.Bitmap = new Bitmap(stream);
+            oldBitmap?.Dispose();
+        }
+        else
+        {
+            var oldBitmap = sender.Bitmap;
+            sender.Bitmap = default;
+            oldBitmap?.Dispose();
+            sender._canUpdataBitmap = true;
+        }
     }
 
     public static readonly AvaloniaProperty<Bitmap?> BitmapProperty =
-        AvaloniaProperty.Register<ImageBufferView, Bitmap?>(
-            nameof(Bitmap), coerce: (sender, e) =>
-            {
-                if (sender is not ImageBufferView control)
-                {
-                    return e;
-                }
-                
-                control.SourceSize = e?.Size ?? control.RenderSize;
-                return e;
-            });
+     AvaloniaProperty.Register<ImageBufferView, Bitmap?>(nameof(Bitmap));
 
     /// <summary>
     /// 实际渲染的画面
     /// </summary>
     public Bitmap? Bitmap
     {
-        get => (Bitmap?)this.GetValue(BitmapProperty)!;
-        set => this.SetValue(BitmapProperty, value);
+        get => (Bitmap?)GetValue(BitmapProperty)!;
+        set => SetValue(BitmapProperty, value);
+    }
+
+    private static void BitmapChanged(ImageBufferView sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is Bitmap bitmap)
+        {
+            sender.SourceSize = bitmap.Size;
+        }
+        else
+        {
+            sender.SourceSize = sender.RenderSize;
+        }
     }
 
     /// <summary>
@@ -97,7 +105,7 @@ public partial class ImageBufferView : Control
     /// </summary>
     private bool _canUpdataBitmap = true;
 
-    public Size RenderSize => this.Bounds.Size;
+    public Size RenderSize => Bounds.Size;
 
     public Size SourceSize { get; private set; }
 
