@@ -24,7 +24,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// 待播放图片流缓存
         /// </summary>
 
-        private readonly List<ArraySegment<byte>> _buffers = new();
+        private readonly List<ArraySegment<byte>> _buffers = [];
 
         private CancellationTokenSource? _cancellationTokenSource;
 
@@ -87,6 +87,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     }
                 }
             }
+            ImageBuffer = default;
         }
     }
 }

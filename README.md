@@ -9,13 +9,13 @@ Avalonia 图片二进制流显示 (主要用于显示摄像头画面)
 	<ibv:ImageBufferView
 		Grid.Row="1"
 		Margin="5"
+        DefaultBackground="Black"
 		ImageBuffer="{Binding ImageBuffer}"
 		Stretch="Uniform" />
 ```
 
 ViewModel
 ```
-	
     public class MainWindowViewModel : ViewModelBase
     {
         /// <summary>
@@ -90,6 +90,7 @@ ViewModel
                         Task.Delay(1).Wait();
                     }
                 }
+                ImageBuffer = default;
             }, token);
         }
     }

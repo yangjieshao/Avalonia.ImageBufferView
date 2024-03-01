@@ -21,7 +21,10 @@
     </Window.DataContext>
 
 
-    <Grid ColumnDefinitions="100,*,*,*" RowDefinitions="50,*,*,*,*">
+    <Grid
+        Background="GreenYellow"
+        ColumnDefinitions="100,*,*,*"
+        RowDefinitions="50,*,*,*,*">
 
         <Button
             Grid.Row="0"
@@ -82,14 +85,18 @@
             Name="FirstPic"
             Grid.Row="1"
             Grid.Column="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            DefaultBackground="Black"
             ImageBuffer="{Binding ImageBuffer}"
             Stretch="None"
             StretchDirection="Both" />
 
-        <ibv:ImageBufferView
+        <!--<ibv:ImageBufferView
             Grid.Row="1"
             Grid.Column="2"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="AliceBlue"
             Stretch="None"
             StretchDirection="UpOnly" />
 
@@ -97,6 +104,7 @@
             Grid.Row="1"
             Grid.Column="3"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="BurlyWood"
             Stretch="None"
             StretchDirection="DownOnly" />
 
@@ -104,6 +112,7 @@
             Grid.Row="2"
             Grid.Column="1"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="Chocolate"
             Stretch="Fill"
             StretchDirection="Both" />
 
@@ -112,19 +121,28 @@
             Grid.Column="2"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Fill"
-            StretchDirection="UpOnly" />
+            StretchDirection="UpOnly">
+            <ibv:ImageBufferView.DefaultBackground>
+                <ImageBrush Source="/Assets/Camera.png" Stretch="UniformToFill" />
+            </ibv:ImageBufferView.DefaultBackground>
+        </ibv:ImageBufferView>
 
         <ibv:ImageBufferView
             Grid.Row="2"
             Grid.Column="3"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="Fill"
-            StretchDirection="DownOnly" />
+            StretchDirection="DownOnly">
+            <ibv:ImageBufferView.DefaultBackground>
+                <ImageBrush Source="/Assets/card.png" Stretch="Fill" />
+            </ibv:ImageBufferView.DefaultBackground>
+        </ibv:ImageBufferView>
 
         <ibv:ImageBufferView
             Grid.Row="3"
             Grid.Column="1"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="DarkGray"
             Stretch="Uniform"
             StretchDirection="Both" />
 
@@ -132,6 +150,7 @@
             Grid.Row="3"
             Grid.Column="2"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="Gainsboro"
             Stretch="Uniform"
             StretchDirection="UpOnly" />
 
@@ -139,6 +158,7 @@
             Grid.Row="3"
             Grid.Column="3"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="DarkGreen"
             Stretch="Uniform"
             StretchDirection="DownOnly" />
 
@@ -146,6 +166,7 @@
             Grid.Row="4"
             Grid.Column="1"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="FloralWhite"
             Stretch="UniformToFill"
             StretchDirection="Both" />
 
@@ -153,6 +174,7 @@
             Grid.Row="4"
             Grid.Column="2"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+            DefaultBackground="Linen"
             Stretch="UniformToFill"
             StretchDirection="UpOnly" />
 
@@ -161,6 +183,6 @@
             Grid.Column="3"
             Bitmap="{Binding Bitmap, ElementName=FirstPic}"
             Stretch="UniformToFill"
-            StretchDirection="DownOnly" />
+            StretchDirection="DownOnly" />-->
     </Grid>
 </Window>
