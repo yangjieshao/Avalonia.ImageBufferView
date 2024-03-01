@@ -26,45 +26,75 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
 
         private readonly List<ArraySegment<byte>> _buffers = [];
 
+        /// <summary>
+        /// </summary>
+        public CancellationTokenSource? CancellationTokenSource
+        {
+            get => _cancellationTokenSource;
+            set => this.RaiseAndSetIfChanged(ref _cancellationTokenSource, value);
+        }
+
         private CancellationTokenSource? _cancellationTokenSource;
 
         public async void Start()
         {
-            if (_cancellationTokenSource is not null)
+            if (CancellationTokenSource is { })
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource = null;
                 return;
             }
 
-            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource = new CancellationTokenSource();
 
-            await LoadImage(_cancellationTokenSource.Token);
+            await LoadImage(CancellationTokenSource.Token);
+        }
+
+        public void Clean()
+        {
+            if (CancellationTokenSource is not null)
+            {
+                CancellationTokenSource.Cancel();
+                CancellationTokenSource = null;
+            }
+            ImageBuffer = default;
+        }
+
+
+        public void Pause()
+        {
+            if (CancellationTokenSource is null)
+            {
+                return;
+            }
+            CancellationTokenSource.Cancel();
+            CancellationTokenSource = null;
         }
 
         private async ValueTask LoadImage(CancellationToken token)
         {
-            if (!Directory.Exists("Images"))
+            if (_buffers.Count == 0)
             {
-                return;
-            }
-            var files = new DirectoryInfo("Images").GetFiles("*.jpeg");
+                if (!Directory.Exists("Images"))
+                {
+                    return;
+                }
+                var files = new DirectoryInfo("Images").GetFiles("*.jpeg");
 
-            // Ready buffers
-            foreach (var file in files)
-            {
-                if (token.IsCancellationRequested)
+                // Ready buffers
+                foreach (var file in files)
                 {
-                    break;
-                }
-                try
-                {
-                    var buffer = await File.ReadAllBytesAsync(file.FullName, token);
-                    _buffers.Add(buffer);
-                }
-                catch (Exception)
-                {
-                    // ignored
+                    if (token.IsCancellationRequested)
+                    {
+                        break;
+                    }
+                    try
+                    {
+                        var buffer = await File.ReadAllBytesAsync(file.FullName, token);
+                        _buffers.Add(buffer);
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
                 }
             }
 
@@ -87,7 +117,6 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     }
                 }
             }
-            ImageBuffer = default;
         }
     }
 }
