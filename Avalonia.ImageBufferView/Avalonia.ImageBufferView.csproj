@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
-        <Version>11.0.9.2</Version>
+        <Version>11.0.9.3</Version>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyName>$(MSBuildProjectName)</AssemblyName>

@@ -58,7 +58,6 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
             ImageBuffer = default;
         }
 
-
         public void Pause()
         {
             if (CancellationTokenSource is null)

@@ -120,42 +120,64 @@ public partial class ImageBufferView : Control
 
     public Size SourceSize { get; private set; }
 
-    protected override Size MeasureOverride(Size constraint)
+    protected override Size MeasureOverride(Size availableSize)
     {
-        return Bitmap is not null ? Stretch.CalculateSize(constraint, SourceSize, StretchDirection)
-                                  : base.MeasureOverride(constraint);
+        return Bitmap is not null ? Stretch.CalculateSize(availableSize, SourceSize, StretchDirection)
+                                  : base.MeasureOverride(availableSize);
     }
 
-    protected override Size ArrangeOverride(Size arrangeSize)
+    protected override Size ArrangeOverride(Size finalSize)
     {
-        return Bitmap is not null ? Stretch.CalculateSize(arrangeSize, SourceSize)
-                                  : base.ArrangeOverride(arrangeSize);
+        return Bitmap is not null ? Stretch.CalculateSize(finalSize, SourceSize)
+                                  : base.ArrangeOverride(finalSize);
     }
 
     public override void Render(DrawingContext drawingContext)
     {
-        if (Bitmap is { })
+        if (RenderSize.Width > 0.0
+            && RenderSize.Height > 0.0)
         {
-            var sourceSize = SourceSize;
-
-            var viewPort = new Rect(RenderSize);
-            var scale = Stretch.CalculateScaling(RenderSize, sourceSize, StretchDirection);
-            var scaledSize = sourceSize * scale;
-            var destRect = viewPort
-                .CenterRect(new Rect(scaledSize))
-                .Intersect(viewPort);
-            var sourceRect = new Rect(sourceSize)
-                .CenterRect(new Rect(destRect.Size / scale));
-
-            if (Bitmap is not null)
+            if (Bitmap is { })
             {
-                drawingContext.DrawImage(Bitmap, sourceRect, destRect);
+                var rect = new Rect(RenderSize);
+                var size = SourceSize;
+                var vector = Stretch.CalculateScaling(RenderSize, size, StretchDirection);
+                var size2 = size * vector;
+
+                // Avalonia.Controls.Image 的裁剪逻辑:
+                var destRect = rect.CenterRect(new Rect(size2)).Intersect(rect);
+                var sourceRect = new Rect(size).CenterRect(new Rect(destRect.Size / vector));
+
+                //// wpf 的裁剪逻辑：
+                // var destRect = new Rect(size2).Intersect(rect);
+                // var sourceRect = new Rect(destRect.Size / vector);
+
+                if (Bitmap is not null)
+                {
+                    drawingContext.DrawImage(Bitmap, sourceRect, destRect);
+                }
+
+                //var sourceSize = SourceSize;
+
+                //var viewPort = new Rect(RenderSize);
+                //var scale = Stretch.CalculateScaling(RenderSize, sourceSize, StretchDirection);
+                //var scaledSize = sourceSize * scale;
+                //var destRect = viewPort
+                //    .CenterRect(new Rect(scaledSize))
+                //    .Intersect(viewPort);
+                //var sourceRect = new Rect(sourceSize)
+                //    .CenterRect(new Rect(destRect.Size / scale));
+
+                //if (Bitmap is not null)
+                //{
+                //    drawingContext.DrawImage(Bitmap, sourceRect, destRect);
+                //}
             }
-        }
-        else if (DefaultBackground is { })
-        {
-            Size size = Bounds.Size;
-            drawingContext.FillRectangle(DefaultBackground, new Rect(size));
+            else if (DefaultBackground is { })
+            {
+                Size size = RenderSize;
+                drawingContext.FillRectangle(DefaultBackground, new Rect(size));
+            }
         }
         if (!_canUpdataBitmap)
         {
