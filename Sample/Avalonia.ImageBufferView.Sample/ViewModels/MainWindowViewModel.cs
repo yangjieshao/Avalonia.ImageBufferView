@@ -27,6 +27,17 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         private readonly List<ArraySegment<byte>> _buffers = [];
 
         /// <summary>
+        /// 摄像头
+        /// </summary>
+        public UsbCameraViewModel UsbCamera
+        {
+            get => _usbCamera;
+            private init => this.RaiseAndSetIfChanged(ref _usbCamera, value);
+        }
+
+        private readonly UsbCameraViewModel _usbCamera = new ();
+
+        /// <summary>
         /// </summary>
         public CancellationTokenSource? CancellationTokenSource
         {

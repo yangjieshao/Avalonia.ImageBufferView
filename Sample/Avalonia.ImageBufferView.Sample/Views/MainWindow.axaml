@@ -20,197 +20,248 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
 
+    <Grid ColumnDefinitions="*,310">
+        <Grid
+            Background="GreenYellow"
+            ColumnDefinitions="100,*,*,*"
+            RowDefinitions="50,*,*,*,*">
 
-    <Grid
-        Background="GreenYellow"
-        ColumnDefinitions="100,*,*,*"
-        RowDefinitions="50,*,*,*,*">
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0"
+                ColumnDefinitions="*,*">
+
+                <Button
+                    Grid.Column="0"
+                    Height="30"
+                    Padding="5,5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding Start}"
+                    Content="Start"
+                    Cursor="Hand"
+                    IsVisible="{Binding CancellationTokenSource, Converter={x:Static ObjectConverters.IsNull}}" />
+
+                <Button
+                    Grid.Column="0"
+                    Height="30"
+                    Padding="5,5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding Pause}"
+                    Content="Pause"
+                    Cursor="Hand"
+                    IsVisible="{Binding CancellationTokenSource, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+                <Button
+                    Grid.Column="1"
+                    Height="30"
+                    Padding="5,5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding Clean}"
+                    Content=" Clean"
+                    Cursor="Hand"
+                    IsVisible="{Binding ImageBuffer, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Grid>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Both" />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="UpOnly" />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="DownOnly" />
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="None" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="Fill" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="Uniform" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="UniformToFill" />
+
+            <ibv:ImageBufferView
+                Name="FirstPic"
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                DefaultBackground="Black"
+                ImageBuffer="{Binding ImageBuffer}"
+                Stretch="None"
+                StretchDirection="Both" />
+
+            <ibv:ImageBufferView
+                Grid.Row="1"
+                Grid.Column="2"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="AliceBlue"
+                Stretch="None"
+                StretchDirection="UpOnly" />
+
+            <ibv:ImageBufferView
+                Grid.Row="1"
+                Grid.Column="3"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="BurlyWood"
+                Stretch="None"
+                StretchDirection="DownOnly" />
+
+            <ibv:ImageBufferView
+                Grid.Row="2"
+                Grid.Column="1"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="Chocolate"
+                Stretch="Fill"
+                StretchDirection="Both" />
+
+            <ibv:ImageBufferView
+                Grid.Row="2"
+                Grid.Column="2"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                Stretch="Fill"
+                StretchDirection="UpOnly">
+                <ibv:ImageBufferView.DefaultBackground>
+                    <ImageBrush Source="/Assets/Camera.png" Stretch="UniformToFill" />
+                </ibv:ImageBufferView.DefaultBackground>
+            </ibv:ImageBufferView>
+
+            <ibv:ImageBufferView
+                Grid.Row="2"
+                Grid.Column="3"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                Stretch="Fill"
+                StretchDirection="DownOnly">
+                <ibv:ImageBufferView.DefaultBackground>
+                    <ImageBrush Source="/Assets/card.png" Stretch="Fill" />
+                </ibv:ImageBufferView.DefaultBackground>
+            </ibv:ImageBufferView>
+
+            <ibv:ImageBufferView
+                Grid.Row="3"
+                Grid.Column="1"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="DarkGray"
+                Stretch="Uniform"
+                StretchDirection="Both" />
+
+            <ibv:ImageBufferView
+                Grid.Row="3"
+                Grid.Column="2"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="Gainsboro"
+                Stretch="Uniform"
+                StretchDirection="UpOnly" />
+
+            <ibv:ImageBufferView
+                Grid.Row="3"
+                Grid.Column="3"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="DarkGreen"
+                Stretch="Uniform"
+                StretchDirection="DownOnly" />
+
+            <ibv:ImageBufferView
+                Grid.Row="4"
+                Grid.Column="1"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="FloralWhite"
+                Stretch="UniformToFill"
+                StretchDirection="Both" />
+
+            <ibv:ImageBufferView
+                Grid.Row="4"
+                Grid.Column="2"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                DefaultBackground="Linen"
+                Stretch="UniformToFill"
+                StretchDirection="UpOnly" />
+
+            <ibv:ImageBufferView
+                Grid.Row="4"
+                Grid.Column="3"
+                Bitmap="{Binding Bitmap, ElementName=FirstPic}"
+                Stretch="UniformToFill"
+                StretchDirection="DownOnly" />
+        </Grid>
+        <!--#region 实时画面-->
 
         <Grid
-            Grid.Row="0"
-            Grid.Column="0"
-            ColumnDefinitions="*,*">
-
-            <Button
-                Grid.Column="0"
-                Height="30"
-                Padding="5,5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Command="{Binding Start}"
-                Content="Start"
-                Cursor="Hand"
-                IsVisible="{Binding CancellationTokenSource, Converter={x:Static ObjectConverters.IsNull}}" />
-
-            <Button
-                Grid.Column="0"
-                Height="30"
-                Padding="5,5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Command="{Binding Pause}"
-                Content="Pause"
-                Cursor="Hand"
-                IsVisible="{Binding CancellationTokenSource, Converter={x:Static ObjectConverters.IsNotNull}}" />
-
-            <Button
-                Grid.Column="1"
-                Height="30"
-                Padding="5,5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Command="{Binding Clean}"
-                Content=" Clean"
-                Cursor="Hand"
-                IsVisible="{Binding ImageBuffer, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            Grid.Column="1"
+            Background="BlueViolet"
+            RowDefinitions="auto,30,30">
+            <ibv:ImageBufferView
+                Grid.Row="0"
+                Width="300"
+                Height="300"
+                Margin="5"
+                ImageBuffer="{Binding UsbCamera.CurrentImageBuffer}"
+                Stretch="UniformToFill"
+                StretchDirection="Both">
+                <ibv:ImageBufferView.DefaultBackground>
+                    <ImageBrush Source="/Assets/Camera.png" Stretch="UniformToFill" />
+                </ibv:ImageBufferView.DefaultBackground>
+            </ibv:ImageBufferView>
+            <ComboBox
+                Grid.Row="1"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ItemsSource="{Binding UsbCamera.DeviceList}"
+                SelectedItem="{Binding UsbCamera.Device, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Name}" />
+                            <TextBlock IsVisible="{Binding Converter={x:Static ObjectConverters.IsNull}}" Text="无设备" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox
+                Grid.Row="2"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ItemsSource="{Binding UsbCamera.CharacteristicList}"
+                SelectedItem="{Binding UsbCamera.Characteristic, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
 
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="Both" />
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="UpOnly" />
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="3"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="DownOnly" />
-
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="None" />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="Fill" />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="Uniform" />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="UniformToFill" />
-
-        <ibv:ImageBufferView
-            Name="FirstPic"
-            Grid.Row="1"
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            DefaultBackground="Black"
-            ImageBuffer="{Binding ImageBuffer}"
-            Stretch="None"
-            StretchDirection="Both" />
-
-        <ibv:ImageBufferView
-            Grid.Row="1"
-            Grid.Column="2"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="AliceBlue"
-            Stretch="None"
-            StretchDirection="UpOnly" />
-
-        <ibv:ImageBufferView
-            Grid.Row="1"
-            Grid.Column="3"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="BurlyWood"
-            Stretch="None"
-            StretchDirection="DownOnly" />
-
-        <ibv:ImageBufferView
-            Grid.Row="2"
-            Grid.Column="1"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="Chocolate"
-            Stretch="Fill"
-            StretchDirection="Both" />
-
-        <ibv:ImageBufferView
-            Grid.Row="2"
-            Grid.Column="2"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            Stretch="Fill"
-            StretchDirection="UpOnly">
-            <ibv:ImageBufferView.DefaultBackground>
-                <ImageBrush Source="/Assets/Camera.png" Stretch="UniformToFill" />
-            </ibv:ImageBufferView.DefaultBackground>
-        </ibv:ImageBufferView>
-
-        <ibv:ImageBufferView
-            Grid.Row="2"
-            Grid.Column="3"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            Stretch="Fill"
-            StretchDirection="DownOnly">
-            <ibv:ImageBufferView.DefaultBackground>
-                <ImageBrush Source="/Assets/card.png" Stretch="Fill" />
-            </ibv:ImageBufferView.DefaultBackground>
-        </ibv:ImageBufferView>
-
-        <ibv:ImageBufferView
-            Grid.Row="3"
-            Grid.Column="1"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="DarkGray"
-            Stretch="Uniform"
-            StretchDirection="Both" />
-
-        <ibv:ImageBufferView
-            Grid.Row="3"
-            Grid.Column="2"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="Gainsboro"
-            Stretch="Uniform"
-            StretchDirection="UpOnly" />
-
-        <ibv:ImageBufferView
-            Grid.Row="3"
-            Grid.Column="3"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="DarkGreen"
-            Stretch="Uniform"
-            StretchDirection="DownOnly" />
-
-        <ibv:ImageBufferView
-            Grid.Row="4"
-            Grid.Column="1"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="FloralWhite"
-            Stretch="UniformToFill"
-            StretchDirection="Both" />
-
-        <ibv:ImageBufferView
-            Grid.Row="4"
-            Grid.Column="2"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            DefaultBackground="Linen"
-            Stretch="UniformToFill"
-            StretchDirection="UpOnly" />
-
-        <ibv:ImageBufferView
-            Grid.Row="4"
-            Grid.Column="3"
-            Bitmap="{Binding Bitmap, ElementName=FirstPic}"
-            Stretch="UniformToFill"
-            StretchDirection="DownOnly" />
+        <!--#endregion 实时画面-->
     </Grid>
 </Window>
