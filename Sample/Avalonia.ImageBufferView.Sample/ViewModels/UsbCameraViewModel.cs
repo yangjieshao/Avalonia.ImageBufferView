@@ -1,13 +1,20 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
 using DynamicData;
 using FlashCap;
+using HarfBuzzSharp;
 using ReactiveUI;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Avalonia.ImageBufferView.Sample.ViewModels
@@ -61,7 +68,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                              .Where(d => !d.Name.Contains("Virtual", StringComparison.InvariantCultureIgnoreCase))
                              .Where(d => d.Characteristics.Any(r =>
                              {
-                                 return r.PixelFormat != PixelFormats.Unknown;
+                                 return r.PixelFormat != FlashCap.PixelFormats.Unknown;
                              })))
                 {
                     devicesList.Add(descriptor);
@@ -111,6 +118,19 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         }
 
         private ArraySegment<byte> _currentImageBuffer;
+
+        /// <summary>
+        /// </summary>
+        public WriteableBitmap? ImageBrush
+        {
+            get => _imageBrush;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _imageBrush, value);
+            }
+        }
+
+        private WriteableBitmap? _imageBrush;
 
         /// <summary>
         /// 是否有画面
@@ -187,7 +207,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                 var list = new List<VideoCharacteristicModel>();
                 foreach (var characteristic in device.Characteristics)
                 {
-                    if (characteristic.PixelFormat == PixelFormats.Unknown)
+                    if (characteristic.PixelFormat == FlashCap.PixelFormats.Unknown)
                     {
                         continue;
                     }
@@ -235,6 +255,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     await captureDevice.StopAsync();
                     await captureDevice.DisposeAsync();
                     CurrentImageBuffer = default;
+                    ImageBrush = null;
                 }
 
                 // Descriptor is assigned and set valid characteristics:
@@ -255,7 +276,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
                     }
                 }
             }
-            catch 
+            catch
             {
                 // no use
             }
@@ -267,9 +288,71 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
         /// <param name="bufferScope"> </param>
         private void OnPixelBufferArrived(PixelBufferScope bufferScope)
         {
-            CurrentImageBuffer = bufferScope.Buffer.ReferImage();//.ExtractImage();
+            var buffer = bufferScope.Buffer.ReferImage();//.ExtractImage();
+            if (buffer.Array == null
+                || buffer.Array.Length == 0)
+            {
+                ImageBrush = null;
+                return;
+            }
+            if (ImageBrush == null)
+            {
+                using var stream = new MemoryStream(buffer.Array);
+                using var oldBitmap = new Bitmap(stream);
+
+                ImageBrush = CreateBitmapFromPixelData(oldBitmap.PixelSize.Width, oldBitmap.PixelSize.Height, oldBitmap.Dpi, oldBitmap.Format, oldBitmap.AlphaFormat);
+            }
+            UpdataeBitmapFromPixelData(ImageBrush, buffer);
+
+
+            //System.IO.File.WriteAllBytes($"pics/{DateTime.Now:MMssfff}.jpg", buffer.Array);
             //CurrentImageBuffer = bufferScope.Buffer.ExtractImage();
         }
+        public WriteableBitmap? CreateBitmapFromPixelData(int pixelWidth, int pixelHeight, Vector dpi, PixelFormat? format, AlphaFormat? alphaFormat)
+        {
+            // Standard may need to change on some devices 
+            //var dpi = new Vector(96, 96);
+
+            //var bitmap = new WriteableBitmap(
+            //    new PixelSize(pixelWidth, pixelHeight),
+            //    dpi,
+            //    PixelFormat.Bgra8888,
+            //    AlphaFormat.Premul);
+
+            return new WriteableBitmap(
+                    new PixelSize(pixelWidth, pixelHeight),
+                    dpi,
+                    format,
+                    alphaFormat);
+        }
+
+        public void UpdataeBitmapFromPixelData(WriteableBitmap? wb, ArraySegment<byte> bgraPixelData)
+        {
+            if (wb==null
+                || bgraPixelData.Array is not { Length: > 0 })
+            {
+                return;
+            }
+            //var image = SKBitmap.Decode(bgraPixelData);
+            //using MemoryStream memStream = new();
+            //using SKManagedWStream wstream = new(memStream);
+            //image.Encode(wstream, SKEncodedImageFormat.Bmp, 80);
+            //var buffer =  memStream.ToArray();
+            // Standard may need to change on some devices 
+            //var dpi = new Vector(96, 96);
+
+            //var bitmap = new WriteableBitmap(
+            //    new PixelSize(pixelWidth, pixelHeight),
+            //    dpi,
+            //    PixelFormat.Bgra8888,
+            //    AlphaFormat.Premul);
+
+
+            using var frameBuffer = wb.Lock();
+            Marshal.Copy(bgraPixelData.Array, 0, frameBuffer.Address, bgraPixelData.Array.Length);
+
+        }
+
 
         public async void Start()
         {
@@ -299,6 +382,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
             }
 
             CurrentImageBuffer = default;
+            ImageBrush = null;
         }
     }
 }

@@ -219,18 +219,26 @@
             Grid.Column="1"
             Background="BlueViolet"
             RowDefinitions="auto,30,30">
-            <ibv:ImageBufferView
+            <!--<ibv:ImageBufferView
                 Grid.Row="0"
                 Width="300"
                 Height="300"
                 Margin="5"
                 ImageBuffer="{Binding UsbCamera.CurrentImageBuffer}"
+                IsVisible="False"
                 Stretch="UniformToFill"
                 StretchDirection="Both">
                 <ibv:ImageBufferView.DefaultBackground>
                     <ImageBrush Source="/Assets/Camera.png" Stretch="UniformToFill" />
                 </ibv:ImageBufferView.DefaultBackground>
-            </ibv:ImageBufferView>
+            </ibv:ImageBufferView>-->
+
+            <Image
+                Grid.Row="0"
+                Width="300"
+                Height="300"
+                Margin="5"
+                Source="{Binding UsbCamera.ImageBrush}" />
             <ComboBox
                 Grid.Row="1"
                 Margin="5"
