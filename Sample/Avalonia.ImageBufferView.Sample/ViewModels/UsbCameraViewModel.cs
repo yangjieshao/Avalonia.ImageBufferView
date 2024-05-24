@@ -101,7 +101,17 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
             set
             {
                 Debug.WriteLine("OnPixelBufferArrived");
-                this.RaiseAndSetIfChanged(ref _currentImageBuffer, value);
+
+                //this.RaiseAndSetIfChanged(ref _currentImageBuffer, value);
+
+                // when use YUYV by FlashCap.1.10.0
+                // allways get the same `ArraySegment<byte>` object from `OnPixelBufferArrived`
+                // it means `EqualityComparer<TRet>.Default.Equals(backingField, newValue)` always return true
+                // so can not use RaiseAndSetIfChanged
+
+                _currentImageBuffer = value;
+                this.RaisePropertyChanged(nameof(CurrentImageBuffer));
+
                 var ret = value is { Count: > 0 };
                 if (ret != IsPlaying)
                 {

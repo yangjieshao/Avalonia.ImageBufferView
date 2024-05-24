@@ -2,7 +2,6 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Avalonia.ImageBufferView;
@@ -15,7 +14,6 @@ public partial class ImageBufferView : Control
         AffectsMeasure<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty, DefaultBackgroundProperty);
         AffectsArrange<ImageBufferView>(BitmapProperty, StretchProperty, StretchDirectionProperty, DefaultBackgroundProperty);
 
-        ImageBufferProperty.Changed.AddClassHandler<ImageBufferView>(ImageBufferChanged);
         BitmapProperty.Changed.AddClassHandler<ImageBufferView>(BitmapChanged);
     }
 
@@ -38,7 +36,30 @@ public partial class ImageBufferView : Control
     }
 
     public static readonly AvaloniaProperty<ArraySegment<byte>?> ImageBufferProperty =
-        AvaloniaProperty.Register<ImageBufferView, ArraySegment<byte>?>(nameof(ImageBuffer));
+    AvaloniaProperty.Register<ImageBufferView, ArraySegment<byte>?>(
+        nameof(ImageBuffer), coerce: (sender, e) =>
+        {
+            if (sender is not ImageBufferView { _canUpdataBitmap: true } control)
+            {
+                return e;
+            }
+
+            if (e.HasValue
+            && e.Value.Array != null
+            && e.Value.Array.Length > 0)
+            {
+                var oldBitmap = control.Bitmap;
+                using MemoryStream stream = new(e.Value.Array);
+                control.Bitmap = new Bitmap(stream);
+                oldBitmap?.Dispose();
+                control._canUpdataBitmap = false;
+            }
+            else
+            {
+                control.Bitmap = null;
+            }
+            return e;
+        });
 
     /// <summary>
     /// 要渲染的图片的流
@@ -47,31 +68,6 @@ public partial class ImageBufferView : Control
     {
         get => (ArraySegment<byte>?)GetValue(ImageBufferProperty);
         set => SetValue(ImageBufferProperty, value);
-    }
-
-    private static void ImageBufferChanged(ImageBufferView sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        Debug.WriteLine("ImageBufferChanged");
-        if (e.NewValue is ArraySegment<byte> buffer
-            && buffer.Array != null
-                && buffer.Array.Length > 0)
-        {
-            if (!sender._canUpdataBitmap)
-            {
-                return;
-            }
-            sender._canUpdataBitmap = false;
-            using var stream = new MemoryStream(buffer.Array);
-            var oldBitmap = sender.Bitmap;
-            sender.Bitmap = new Bitmap(stream);
-            oldBitmap?.Dispose();
-        }
-        else
-        {
-            var oldBitmap = sender.Bitmap;
-            sender.Bitmap = default;
-            oldBitmap?.Dispose();
-        }
     }
 
     public static readonly AvaloniaProperty<Bitmap?> BitmapProperty =
