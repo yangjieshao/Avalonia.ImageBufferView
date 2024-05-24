@@ -16,7 +16,10 @@ public partial class ImageBufferView : Control
 
         BitmapProperty.Changed.AddClassHandler<ImageBufferView>(BitmapChanged);
     }
-
+    public ImageBufferView():base()
+    {
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
+    }
     public static readonly AvaloniaProperty<Stretch> StretchProperty =
         AvaloniaProperty.Register<ImageBufferView, Stretch>(nameof(Stretch), Stretch.None);
 
