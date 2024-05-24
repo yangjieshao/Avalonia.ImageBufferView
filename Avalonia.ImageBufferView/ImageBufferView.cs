@@ -47,20 +47,20 @@ public partial class ImageBufferView : Control
                 return e;
             }
 
+            var oldBitmap = control.Bitmap;
             if (e.HasValue
             && e.Value.Array != null
             && e.Value.Array.Length > 0)
             {
-                var oldBitmap = control.Bitmap;
-                using MemoryStream stream = new(e.Value.Array);
+                using var stream = new MemoryStream(e.Value.Array);
                 control.Bitmap = new Bitmap(stream);
-                oldBitmap?.Dispose();
                 control._canUpdataBitmap = false;
             }
             else
             {
                 control.Bitmap = null;
             }
+            oldBitmap?.Dispose();
             return e;
         });
 
@@ -176,7 +176,7 @@ public partial class ImageBufferView : Control
             }
             else if (DefaultBackground is { })
             {
-                Size size = RenderSize;
+                var size = RenderSize;
                 drawingContext.FillRectangle(DefaultBackground, new Rect(size));
             }
         }
