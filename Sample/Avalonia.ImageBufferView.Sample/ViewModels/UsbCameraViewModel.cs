@@ -107,7 +107,7 @@ namespace Avalonia.ImageBufferView.Sample.ViewModels
             get => _currentImageBuffer;
             set
             {
-                Debug.WriteLine("OnPixelBufferArrived");
+                //Debug.WriteLine("OnPixelBufferArrived");
                 this.RaiseAndSetIfChanged(ref _currentImageBuffer, value);
                 var ret = value is { Count: > 0 };
                 if (ret != IsPlaying)

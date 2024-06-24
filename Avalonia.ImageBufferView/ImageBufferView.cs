@@ -51,7 +51,7 @@ public partial class ImageBufferView : Control
 
     private static void ImageBufferChanged(ImageBufferView sender, AvaloniaPropertyChangedEventArgs e)
     {
-        Debug.WriteLine("ImageBufferChanged");
+        //Debug.WriteLine("ImageBufferChanged");
         if (e.NewValue is ArraySegment<byte> buffer
             && buffer.Array != null
                 && buffer.Array.Length > 0)
