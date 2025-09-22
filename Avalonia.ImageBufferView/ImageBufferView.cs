@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using System;
 using System.IO;
 
@@ -47,20 +48,29 @@ public partial class ImageBufferView : Control
                 return e;
             }
 
-            var oldBitmap = control.Bitmap;
             if (e.HasValue
             && e.Value.Array != null
             && e.Value.Array.Length > 0)
             {
-                using var stream = new MemoryStream(e.Value.Array);
-                control.Bitmap = new Bitmap(stream);
                 control._canUpdataBitmap = false;
+                System.Threading.ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    using var stream = new MemoryStream(e.Value.Array);
+                    var newBitmap = new Bitmap(stream);
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        var oldBitmap = control.Bitmap;
+                        control.Bitmap = newBitmap;
+                        oldBitmap?.Dispose();
+                    }, DispatcherPriority.Render);
+                });
             }
             else
             {
+                var oldBitmap = control.Bitmap;
                 control.Bitmap = null;
+                oldBitmap?.Dispose();
             }
-            oldBitmap?.Dispose();
             return e;
         });
 
