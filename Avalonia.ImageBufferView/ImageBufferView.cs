@@ -53,9 +53,10 @@ public partial class ImageBufferView : Control
             && e.Value.Array.Length > 0)
             {
                 control._canUpdataBitmap = false;
+                var buffer = e.Value; // 捕获当前 buffer，避免闭包问题
                 System.Threading.ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    using var stream = new MemoryStream(e.Value.Array);
+                    using var stream = new MemoryStream(buffer.Array, buffer.Offset, buffer.Count, false);
                     var newBitmap = new Bitmap(stream);
                     Dispatcher.UIThread.Post(() =>
                     {
@@ -196,5 +197,13 @@ public partial class ImageBufferView : Control
         }
 
         base.Render(drawingContext);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        var oldBitmap = Bitmap;
+        Bitmap = null;
+        oldBitmap?.Dispose();
     }
 }
